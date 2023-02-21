@@ -371,7 +371,8 @@ def aa_pipe(data_dir, interpolation, crop, dali_cpu=False, rank=0, world_size=1,
 
     images = fn.flip(images, horizontal=rng)
 
-    output = auto_augment.auto_augment_image_net(images, shapes)
+    images = fn.rotate(images, angle=15)
+    output = fn.experimental.equalize(images)
 
     output = fn.crop_mirror_normalize(output.gpu(),
         dtype=types.FLOAT,
