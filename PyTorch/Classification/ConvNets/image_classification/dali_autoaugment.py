@@ -347,7 +347,7 @@ def aa_pipe(data_dir, interpolation, crop, dali_cpu=False, rank=0, world_size=1,
         random_shuffle=True,
         pad_last_batch=True)
 
-    images = fn.decoders.image(jpegs, device="cpu", output_type=types.RGB).gpu()
+    images = fn.decoders.image(jpegs, device="cpu", output_type=types.RGB)
     shapes = fn.peek_image_shape(jpegs)
 
     images = fn.random_resized_crop(
@@ -357,7 +357,7 @@ def aa_pipe(data_dir, interpolation, crop, dali_cpu=False, rank=0, world_size=1,
         random_aspect_ratio=[0.75, 4.0 / 3.0],
         random_area=[0.08, 1.0],
         num_attempts=100,
-        antialias=False)
+        antialias=False).gpu()
 
 
     images = fn.flip(images, horizontal=rng)
