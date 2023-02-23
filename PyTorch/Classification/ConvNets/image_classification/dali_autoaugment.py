@@ -347,16 +347,7 @@ def aa_pipe(data_dir, interpolation, crop, dali_cpu=False, rank=0, world_size=1,
         random_shuffle=True,
         pad_last_batch=True)
 
-    if dali_cpu:
-        images = fn.decoders.image(jpegs, device="cpu", output_type=types.RGB)
-    else:
-        # This padding sets the size of the internal nvJPEG buffers to be able to handle all images
-        # from full-sized ImageNet without additional reallocations
-        images = fn.decoders.image(jpegs,
-                                   device="mixed",
-                                   output_type=types.RGB,
-                                   device_memory_padding=211025920,
-                                   host_memory_padding=140544512)
+    images = fn.decoders.image(jpegs, device="cpu", output_type=types.RGB).gpu()
     shapes = fn.peek_image_shape(jpegs)
 
     images = fn.random_resized_crop(
